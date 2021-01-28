@@ -1,5 +1,63 @@
+
+% FILE: rankFilters.m
+% 
+% FUNCTION: rankFilters
+% 
+% CALL: [rankingFilters, tableRank, error] =....
+%    rankFilters(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M, type)
+% 
+% Returns the best filters with passband frequency Fp and stopband frequency Fs,
+% with sampling period Ts with order less than M and which respects the passband
+% deltaP and stopband deltaS constraints for a all 9 windows 
+% 
+%
+% INPUTS:
+%         Fp          - passband frequency
+%         Fs          - stopband frequency
+%         deltaP      - passband constraint
+%         deltaS      - stopband constraint
+%         Ts          - sampling period 
+%         Wn          - window names, a vector with the names for the used
+%                       windows
+%         wn_param    - window extra parameters for the windows
+%         M           - max order for the designed filter
+%         type        - low or high pass filters
+%         
+% VALUES FOR Wn must be one of those bellow:
+%           boxcar   
+%           triang  
+%           blackman  
+%           chebwin  
+%           hamming
+%           hanning
+%           kaiser
+%           lanczos
+%           tukeywin
+% 
+%
+% OUTPUTS:
+%         rankingFilters  - filter orderd by order and the sum of
+%                               the errors
+%         tableRank       - filter orderd by the above criteria and
+%                               returned as a table
+%         error           - will be used in a future release
+%         
+% 
+% USES: 
+%         getWindow
+%         FIR
+%         checkError
+%         returnMaxError
+%         truncateCellArray
+%         filterDesign         
+%
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+
+
 function [rankingFilters, tableRank, error] =....
-    rankFilters(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M)
+    rankFilters(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M, type)
 
     error = cell(20, 1); % maximum number of errors
     errorIndex = 1; % error index starts at 1
@@ -102,7 +160,13 @@ function [rankingFilters, tableRank, error] =....
         error{errorIndex} = ['Maximum order was left empty. Set max order to 512'];
         errorIndex = errorIndex + 1;
     end
-
+    
+    if nargin < 9
+        type = 'low';
+    end
+    if isempty(type)
+        type = 'low';
+    end
 % ---------------------------------------------------------------------- %
     
     error = truncateCellArray(error, errorIndex - 1);
@@ -111,16 +175,18 @@ function [rankingFilters, tableRank, error] =....
     for i = 1:numel(Wn)
        
         if checkType(Wn{i}, [4, 7, 8, 9])
-            [H, w, filterOrder, deltaP_real, deltaS_real, error, found] = ...
-                filterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn{i}, wn_param(param_index), M);
+            [b, a, filterOrder, deltaP_real, deltaS_real, error, found] = ...
+                filterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn{i}, wn_param(param_index), M, type);
             param_index = param_index + 1;
         else
-            [H, w, filterOrder, deltaP_real, deltaS_real, error, found] = ...
-                filterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn{i}, wn_param(param_index), M);
-        end
+            [b, a, filterOrder, deltaP_real, deltaS_real, error, found] = ...
+                filterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn{i}, wn_param(param_index), M, type);
+        end 
         
-        currentFilter.H = H;
-        currentFilter.w = w;
+        [H, w] = freqz(b, a, 2048);
+        
+        currentFilter.b = b;
+        currentFilter.a = a;
         currentFilter.windowName = Wn{i};
         currentFilter.filterOrder = filterOrder;
         currentFilter.deltaP = deltaP_real;

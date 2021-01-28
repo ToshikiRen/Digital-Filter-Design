@@ -1,3 +1,21 @@
+% FILE: plotGainDB.m
+% 
+% FUNCTION plotGainDB
+% 
+% CALL: [] = plotGainDB(H, omeg, titleDBScale)
+% 
+% Plots the frequency response in dB of a filter on the scale omeg with title
+% given by titleDBScale
+% 
+% INPUTS:
+%         H                - frequency response of a filter
+%         omeg             - the scale on which to plot the response
+%         titleDBScale     - title for the plot
+% 
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+
 function [] = plotGainDB(H, omeg, titleDBScale)
 
     if nargin < 2

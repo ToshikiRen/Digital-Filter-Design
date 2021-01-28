@@ -1,3 +1,58 @@
+% FILE: plotFilterDesign.m
+% 
+% FUNCTION: plotFilterDesign
+% 
+% CALL: [deltaP_real, deltaS_real, error] =....
+%    plotFilterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M, plots)
+% 
+% Returns the impulse response of the best filter with passband frequency Fp
+% and stopband frequency Fs, with sampling period Ts with order less than M
+% and which respects the passband deltaP and stopband deltaS constraints for
+% a given window
+% 
+% INPUTS:
+%         Fp          - passband frequency
+%         Fs          - stopband frequency
+%         deltaP      - passband constraint
+%         deltaS      - stopband constraint
+%         Ts          - sampling period 
+%         Wn          - window name
+%         wn_param    - window extra parameter
+%         M           - max order for the designed filter
+%         plots       - the type of plots ploted, must be of of the
+%                       values in {classic, dB, phase}
+%         
+% VALUES FOR Wn must be one of those bellow:
+%           boxcar   
+%           triang  
+%           blackman  
+%           chebwin  
+%           hamming
+%           hanning
+%           kaiser
+%           lanczos
+%           tukeywin
+% 
+%
+% OUTPUTS:
+%         deltaP_real - filter passband error
+%         deltaS_real - filter stopband error
+%         error       - error while designing the filter
+%        
+% 
+% USES: 
+%         getWindow
+%         FIR
+%         checkError
+%         returnMaxError
+%         truncateCellArray
+%         filterDesign
+%
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+
+
 function [deltaP_real, deltaS_real, error] =....
     plotFilterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M, plots)
 
@@ -128,24 +183,37 @@ function [deltaP_real, deltaS_real, error] =....
     
     error = truncateCellArray(error, errorIndex-1);
     
-    [H, w, filterOrder, deltaP_real, deltaS_real, ~, found] = ...
-    filterDesign(Fp, Fs, deltaP, deltaS, Ts, 'kaiser', wn_param, M);
+    [b, a, filterOrder, deltaP_real, deltaS_real, ~, found] = ...
+    filterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M);
 
-
+    [H, w] = freqz(b, a, 2048); 
     if found
         for i = 1:numel(plots)
             switch plots{i}
                 case 'classic'
                     figure;
-                    plotGain(H, w, ['Kaiser Window GAIN']);
+                    plotGain(H, w, [upper(Wn(1)) Wn(2:end) ' Window Filter GAIN']);
+                    line([0, 2*pi * Fp * Ts], [1+deltaP/100,1+deltaP/100],....
+                        'Color', 'c', 'LineWidth', 1.5);
+                    line([0, 2*pi * Fp * Ts], [1-deltaP/100,1-deltaP/100],....
+                        'Color', 'c', 'LineWidth', 1.5);
+                    line([2*pi * Fs * Ts, pi], [deltaS/100,deltaS/100],....
+                        'Color', 'm', 'LineWidth', 1.5);
                     legend(['Order = ' num2str(filterOrder)]);
                 case 'dB'
                     figure;
-                    plotGainDB(H, w, ['Kaiser Window in dB GAIN']);
+                    plotGainDB(H, w, [upper(Wn(1)) Wn(2:end) ' Window Filter GAIN in dB']);
+                    
+%                     line([0, 2*pi * Fp * Ts], [20*log10(1+deltaP/100),....
+%                         20*log10(1+deltaP/100)], 'Color', 'c', 'LineWidth', 1.5);
+%                     line([0, 2*pi * Fp * Ts], [20*log10(1-deltaP/100),....
+%                         20*log10(1-deltaP/100)], 'Color', 'c', 'LineWidth', 1.5);
+%                     line([2*pi * Fs * Ts, pi], [20*log10(deltaS/100),....
+%                         20*log10(deltaS/100)], 'Color', 'm', 'LineWidth', 1.5);
                     legend(['Order = ' num2str(filterOrder)]);
                 case 'phase'
                     figure;
-                    plotPhase(H, w, ['Kaiser Window phase']);
+                    plotPhase(H, w, [upper(Wn(1)) Wn(2:end) ' Window Filter phase']);
                     legend(['Order = ' num2str(filterOrder)]);
             end
         end

@@ -1,3 +1,21 @@
+% FILE: plotPhase.m
+% 
+% FUNCTION plotPhase
+% 
+% CALL: [] = plotPhase(H, omeg, titlePhase)
+% 
+% Plots the frequency response phase of a filter on the scale omeg with title
+% given by titlePhase
+% 
+% INPUTS:
+%         H                - frequency response of a filter
+%         omeg             - the scale on which to plot the response
+%         titlePhase       - title for the plot
+% 
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+
 function [] = plotPhase(H, omeg, titlePhase)
 
     if nargin < 2
@@ -29,7 +47,7 @@ function [] = plotPhase(H, omeg, titlePhase)
 
     ax = gca;
     
-    plot(omeg, 180 * angle(H)/pi);
+    plot(omeg, unwrap(180 * angle(H)/pi));
     grid on;
     
     ylabel('Phase');

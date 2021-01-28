@@ -1,11 +1,11 @@
 %% Initializations
 clear all; clc; close all;
 
-M = 16;
-r = 89; 
-L = 1.5;
-beta = 8;
-alfa = 0.65;
+M = 16;      %
+r = 89;      % 
+L = 1.5;     % controls the opening of the window, L close to 0 => rectangular window
+beta = 5;    % controls the opening of the window, beta close to 0 => rectangular window
+alfa = 0.65; % controls the opening of the window, alfa close to 0 => rectangular window
 
 
 w = cell(9,1);

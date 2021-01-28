@@ -30,3 +30,7 @@ plotWindowFIRResponse(w, titles, M, wc, Ts, wn_param);
 M = 32;
 plotWindowFIRResponse(w, titles, M, wc, Ts, wn_param);
 
+%% Filter response M = 128
+
+M = 128;
+plotWindowFIRResponse(w, titles, M, wc, Ts, wn_param);

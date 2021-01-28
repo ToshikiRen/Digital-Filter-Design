@@ -1,3 +1,18 @@
+% FILE: getWindowName.m
+% 
+% FUNCTION: getWindowName
+% 
+% CALL: [w, titles] = getWindowName()
+% 
+% Returns the standard window names and titles for frequency response
+% 
+% OUTPUTS:
+%         w      - 9x1 cell array with all window names
+%         titles - 9x1 cell array with titles for frequency response 
+% 
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
 function [w, titles] = getWindowName()
 
 

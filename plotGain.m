@@ -1,3 +1,21 @@
+% FILE: plotGain.m
+% 
+% FUNCTION plotGain
+% 
+% CALL: [] = plotGain(H, omeg, titleNormalScale)
+% 
+% Plots the frequency response of a filter on the scale omeg with title
+% given by titleNormalScale
+% 
+% INPUTS:
+%         H                   - frequency response of a filter
+%         omeg                - the scale on which to plot the response
+%         titleNormalScale    - title for the plot
+% 
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+
 function [] = plotGain(H, omeg, titleNormalScale)
 
     if nargin < 2

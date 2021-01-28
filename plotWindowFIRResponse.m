@@ -1,3 +1,28 @@
+% FILE: plotWindowFIRResponse.m
+% 
+% FUNCTION: plotWindowFIRResponse
+% 
+% CALL: [] = plotWindowFIRResponse(w, titles, order, wc, Ts, wn_param)
+% 
+% Plots the frequency response of the specified windows, with cutoff
+% frequency wc, samplit period Ts and using the parameters in wn_param for
+% the windows.
+% SUPPORTS ONLY LOW-PASS FILTER AT THE MOMENT !
+% 
+% INPUTS:
+%         w       - window names
+%         titles  - titles for the plots
+%         order   - filter order
+%         wc      - cutoff frequency
+%         Ts      - sampling period
+%         window  - a vector with the window elements, the vector has size
+%                     order + 1
+%         
+% 
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+
 function [] = plotWindowFIRResponse(w, titles, order, wc, Ts, wn_param)
 
     if nargin < 1
@@ -71,14 +96,15 @@ function [] = plotWindowFIRResponse(w, titles, order, wc, Ts, wn_param)
 
         subplot(lineNumber, colNumber, i);
         if checkType(w{i}, [4, 7, 8, 9])
-            Wn = getWindow(w{i}, order, wn_param(wn_index));
+            Wn = getWindow(w{i}, order + 1, wn_param(wn_index));
             wn_index = wn_index + 1;
         else
-            Wn = getWindow(w{i}, order);
+            Wn = getWindow(w{i}, order + 1);
         end
-        [b, a] = FIR(order, wc, Ts, Wn);
+        [b, a] = FIR(order, wc, Ts, Wn, 'low');
         [H, omega] = freqz(b, a, 512);
-        plotGain(H, omega, strcat(titles{i}, ' amplitude'));
+        plotGain(H, omega, strcat(titles{i}, [' amplitude order - ',....
+            num2str(order)]));
 
     end
     
@@ -89,14 +115,15 @@ function [] = plotWindowFIRResponse(w, titles, order, wc, Ts, wn_param)
 
         subplot(lineNumber, colNumber, i);
         if checkType(w{i}, [4, 7, 8, 9])
-            Wn = getWindow(w{i}, order, wn_param(wn_index));
+            Wn = getWindow(w{i}, order + 1, wn_param(wn_index));
             wn_index = wn_index + 1;
         else
-            Wn = getWindow(w{i}, order);
+            Wn = getWindow(w{i}, order + 1);
         end
-        [b, a] = FIR(order, wc, Ts, Wn);
+        [b, a] = FIR(order, wc, Ts, Wn, 'low');
         [H, omega] = freqz(b, a, 512);
-        plotGainDB(H, omega, strcat(titles{i}, ' amplitude in dB'));
+        plotGainDB(H, omega, strcat(titles{i}, [' amplitude in dB order - ',....
+            num2str(order)] ));
 
     end
 
@@ -107,14 +134,15 @@ function [] = plotWindowFIRResponse(w, titles, order, wc, Ts, wn_param)
 
         subplot(lineNumber, colNumber, i);
         if checkType(w{i}, [4, 7, 8, 9])
-            Wn = getWindow(w{i}, order, wn_param(wn_index));
+            Wn = getWindow(w{i}, order + 1, wn_param(wn_index));
             wn_index = wn_index + 1;
         else
-            Wn = getWindow(w{i}, order);
+            Wn = getWindow(w{i}, order + 1);
         end
-        [b, a] = FIR(order, wc, Ts, Wn);
+        [b, a] = FIR(order, wc, Ts, Wn, 'low');
         [H, omega] = freqz(b, a, 512);
-        plotPhase(H, omega, strcat(titles{i}, ' phase'));
+        plotPhase(H, omega, strcat(titles{i}, [' phase order - ',....
+            num2str(order)]));
 
     end
 

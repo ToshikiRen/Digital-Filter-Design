@@ -1,0 +1,191 @@
+Library of M-files desiged for main programs: Phase{1,2,3,4,5} and for future
+work in filter design
+
+
+FUNCTION: cardinalSinShifted
+
+CALL: hn = cardinalSinShifted(M, wc, Ts)
+
+Evaluates the sampled version of a continous sinc in M 
+points with the sampling period Ts
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: changePhaseToLinear
+
+CALL: [H_new, b, a] = changePhaseToLinear(b, a)
+
+Takes in filter coefficients for any given filter and returns
+the coefficients of a filter with linear pahse and the same
+spectruum
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: checkError
+
+CALL: check = checkError(deltaP, deltaP_max, deltaS, deltaS_max)
+
+Checks if deltaP < deltaP_max and deltaS < deltaS_max, and returns
+1 if the conditions hold
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: checkType
+
+CALL: check = checkType(type, indx)
+
+Checks if a given window it's in one of the specified sets, indx must be
+a vector with values in range 1 to 9. Returns 1 if the window given by
+the parameter type it's one from the values at indx
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: filterDesign
+
+CALL: [b, a, filterOrder, deltaP_real, deltaS_real, error, found] =....
+                filterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M, type)
+
+Returns the impulse response of the best filter with passband frequency Fp
+and stopband frequency Fs, with sampling period Ts with order less than M
+and which respects the passband deltaP and stopband deltaS constraints for
+a given window
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: FIR
+
+CALL: [b, a] = FIR(order, wc, Ts, window, type)
+
+The functions returns a FIR filter of type type and of order order and cutoff
+frequency wc with sampling period Ts using the window given by the vector window
+
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: getWindow
+
+CALL: Wn = getWindow(Wn, order, wn_param)
+
+Returns a window of type Wn of length order
+DEFAULT: hanning window of length 16
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: getWindowName
+
+CALL: [w, titles] = getWindowName()
+
+Returns the standard window names and titles for frequency response
+
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: lanczos
+
+CALL: h = lanczos(M, L)
+
+Returns the values of a lanczos window of length M using the extra
+parameter L 
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: plotFilterDesign
+
+CALL: [deltaP_real, deltaS_real, error] =....
+   plotFilterDesign(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M, plots)
+
+Plots the impulse response of the best filter with passband frequency Fp
+and stopband frequency Fs, with sampling period Ts with order less than M
+and which respects the passband deltaP and stopband deltaS constraints for
+a given window
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION plotGain
+
+CALL: [] = plotGain(H, omeg, titleNormalScale)
+
+Plots the frequency response of a filter on the scale omeg with title
+given by titleNormalScale
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION plotGainDB
+
+CALL: [] = plotGainDB(H, omeg, titleDBScale)
+
+Plots the frequency response in dB of a filter on the scale omeg with title
+given by titleDBScale
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION plotPhase
+
+CALL: [] = plotPhase(H, omeg, titlePhase)
+
+Plots the frequency response phase of a filter on the scale omeg with title
+given by titlePhase
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: plotWindowFIRResponse
+
+CALL: [] = plotWindowFIRResponse(w, titles, order, wc, Ts, wn_param)
+
+Plots the frequency response of the specified windows, with cutoff
+frequency wc, samplit period Ts and using the parameters in wn_param for
+the windows.
+SUPPORTS ONLY LOW-PASS FILTER AT THE MOMENT !
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: rankFilters
+
+CALL: [rankingFilters, tableRank, error] =....
+   rankFilters(Fp, Fs, deltaP, deltaS, Ts, Wn, wn_param, M, type)
+
+Returns the best filters with passband frequency Fp and stopband frequency Fs,
+with sampling period Ts with order less than M and which respects the passband
+deltaP and stopband deltaS constraints for a all 9 windows 
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: returnMaxError
+
+CALL: [deltaP_max, deltaS_max] = returnMaxError(H, w, wp, ws, type)
+
+Returns the maximum passband error and the maximum stopband error
+for a given filter
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: setDefaultParamsForAllWindows
+
+CALL: wn_param = setDefaultParamsForAllWindows(Wn)
+
+Returns the default parameters for all windows
+
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: setParamFor
+
+CALL: wn_param = setParamFor(Wn)
+ 
+Returns the default parameters for the given window
+
+%-----------------------------------------------------------------------------%
+
+FUNCTION: truncateCellArray
+
+CALL: truncatedCellArray = truncateCellArray(cellArray, new_size)
+ 
+The functions truncate the input cell array to the new_size, if no new
+    size is given the output cell array has the same length as the input
+
+
+
+
+
+
+

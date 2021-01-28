@@ -1,4 +1,27 @@
-function [b, a] = FIR(order, wc, Ts, window)
+% FILE: FIR.m
+% 
+% FUNCTION: FIR
+% 
+% CALL: [b, a] = FIR(order, wc, Ts, window, type)
+% 
+% The functions returns a FIR filter of type type and of order order and cutoff
+% frequency wc with sampling period Ts using the window given by the vector window
+% 
+% INPUTS:
+%         order   - filter order
+%         wc      - cutoff frequency
+%         Ts      - sampling period
+%         window  - a vector with the window elements, the vector has size
+%                     order + 1
+%         type    - low or high, depending on what filter you want to create
+% 
+% OUTPUTS:
+%         b - filter denominator coefficients
+%         a - filter numerator coefficients
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+function [b, a] = FIR(order, wc, Ts, window, type)
 
     if nargin < 1
         order = 16;
@@ -25,24 +48,53 @@ function [b, a] = FIR(order, wc, Ts, window)
     end
 
     if nargin < 4
-        window = hamming(order);
+        window = hamming(order + 1);
         disp('Window was not set. Default window used');
     elseif isempty(window)
-        window = hamming(order);
+        window = hamming(order + 1);
         disp('Window was left empty. Default window used');
-    elseif numel(window) ~= order
-        window = hamming(order);
+    elseif numel(window) ~= order + 1
+        window = hamming(order + 1);
         disp('Window of incorrect size. Default window used');
     end
     
-    hn = cardinalSinShifted(order, wc, Ts);
-    hn = hn(:);
-    b =  hn .* window(:);
+    if nargin < 5
+        disp('Missing type, default type = low');
+        type = 'low';
+    elseif isempty(type)
+        disp('Empty type, default type = low');
+        type = 'low';
+    end
+    
+    
+    
+    switch type
+        case 'low'
+                
+            hn = cardinalSinShifted(order + 1, wc, Ts);
+            hn = hn(:);
+            b =  hn .* window(:);
+            % Norming 
+            if sum(b) > 1e-10
+                b = b./sum(b);
+            end
+        case 'high'
+            hn = cardinalSinShifted(order + 1, pi - wc, Ts);
+            hn = hn(:);
+            b =  hn .* window(:);
+            % Norming 
+            if sum(b) > 1e-10
+                b = b./sum(b);
+            end
+            
+            b(2:2:end) = -b(2:2:end);
+            
+            
+    end
+    
+    % b =  hn .* window(:);
     a = 1;
     
-    % Norming 
-    if norm(b) > 1e-10
-        b = b./sum(b);
-    end
+
 
 end

@@ -1,3 +1,24 @@
+% FILE: cardinalSinShifted
+% 
+% FUNCTION: cardinalSinShifted
+%
+% CALL: hn = cardinalSinShifted(M, wc, Ts)
+% 
+% Evaluates the sampled version of a continous sinc in M 
+% points with the sampling period Ts
+% 
+% INPUTS:
+%     M  - the length of the discrete sinc
+%     wc - the cutoff "frequency"
+%     Ts - sampling period
+% 
+% OUTPUTS:
+%     hn - discrete cardinal sin 
+
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+% 
 function hn = cardinalSinShifted(M, wc, Ts)
 
     if nargin < 1

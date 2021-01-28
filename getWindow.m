@@ -1,3 +1,27 @@
+% FILE: getWindow.m
+% 
+% FUNCTION: getWindow
+% 
+% CALL: Wn = getWindow(Wn, order, wn_param)
+% 
+% Returns a window of type Wn of length order
+% DEFAULT: hanning window of length 16
+%
+% INPUTS:
+%         Wn       - window type
+%         order    - window length
+%         wn_param - window extra parameter 
+% 
+% 
+% OUTPUTS:
+%         Wn - window values
+% 
+% USES: lanczos
+%
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
+
 function Wn = getWindow(Wn, order, wn_param)
 
     if nargin < 1
@@ -8,10 +32,10 @@ function Wn = getWindow(Wn, order, wn_param)
         Wn = 'hamming';
     end
     if nargin < 2
-        disp('Window order was not set. Set window order to 16.');
+        disp('Window order was not set. Set window length to 16.');
         order = 16;
     elseif isempty(Wn)
-        disp('Window order was left empty. Set window order to 16.');
+        disp('Window order was left empty. Set window length to 16.');
         order = 16;
     end 
     

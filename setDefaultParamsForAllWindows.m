@@ -1,3 +1,34 @@
+% FILE: setDefaultParamsForAllWindows.m
+% 
+% FUNCTION: setDefaultParamsForAllWindows
+% 
+% CALL: wn_param = setDefaultParamsForAllWindows(Wn)
+% 
+% Returns the default parameters for all windows
+% 
+% INPTUS: 
+%         Wn - a vector with the names of the used windows
+% Wn contain a set from those bellow:
+%           boxcar   
+%           triang  
+%           blackman  
+%           chebwin  
+%           hamming
+%           hanning
+%           kaiser
+%           lanczos
+%           tukeywin
+% OUTPUTS:
+%         wn_param - the default parameters for the given windows
+%         
+% USES:
+%       checkType
+%
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021        
+ 
+
 function wn_param = setDefaultParamsForAllWindows(Wn)
     
     

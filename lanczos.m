@@ -1,3 +1,22 @@
+% FILE: lanczos.m
+% 
+% FUNCTION: lanczos
+% 
+% CALL: h = lanczos(M, L)
+% 
+% Returns the values of a lanczos window of length M using the extra
+% parameter L 
+% 
+% INPUTS:
+%         M - length of the returned window
+%         L - gives the oppening of the window, recomanded values 
+%             L in [1, 3]
+% OUTPUTS:
+%           h - the values of a lanczos window of length M and parameter L
+% 
+% Author:  Leonard-Gabriel Necula
+% Created: December 24 2020
+% Updated: January  18 2021
 function h = lanczos(M, L)
 
     if nargin < 1
